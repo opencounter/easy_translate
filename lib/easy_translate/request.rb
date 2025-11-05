@@ -36,11 +36,8 @@ module EasyTranslate
     # Perform the given request
     # @return [String] The response String
     def perform_raw
-      # Construct the request
-      request = Net::HTTP::Post.new(uri.request_uri)
-      request.add_field('X-HTTP-Method-Override', 'GET')
+      request = Net::HTTP::Post.new(uri.request_uri, { 'Content-Type' => 'application/json' })
       request.body = body
-      # Fire and return
       response = http.request(request)
       raise_exception(response) unless response.code == '200'
       response.body

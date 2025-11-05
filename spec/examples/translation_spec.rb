@@ -177,20 +177,16 @@ describe EasyTranslate::Translation do
     end
 
     describe :body do
-
-      it 'should insert the texts into the body' do
+      it 'should insert the texts into a JSON-encoded body' do
         request = klass.new(['abc', 'def'], :to => 'es')
-        expect(request.body).to eq('q=abc&q=def')
+        parsed_payload = JSON.parse(request.body)
+        expect(parsed_payload).to eq( { 'q' => ['abc', 'def'] } )
       end
 
-      it 'should insert the text into the body' do
+      it 'should insert the text into a JSON-encoded body' do
         request = klass.new('abc', :to => 'es')
-        expect(request.body).to eq('q=abc')
-      end
-
-      it 'should URI escape the body' do
-        request = klass.new('%', :to => 'es')
-        expect(request.body).to eq('q=%25')
+        parsed_payload = JSON.parse(request.body)
+        expect(parsed_payload).to eq( { 'q' => ['abc'] } )
       end
 
     end
